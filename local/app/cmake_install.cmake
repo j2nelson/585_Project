@@ -1,4 +1,4 @@
-# Install script for directory: /Users/ellenlowing/Desktop/CS585/project/local/1
+# Install script for directory: /Users/ellenlowing/Desktop/CS585/project/local/app
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/ellenlowing/Desktop/CS585/project/local/1/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/ellenlowing/Desktop/CS585/project/local/app/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
