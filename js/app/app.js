@@ -296,6 +296,7 @@ function processVideo() {
   vc.read(src);
   let process = cv.Mat.zeros(height, width, cv.CV_8UC1);
   process = gray(src);
+  cv.imshow("cameraOutput", process);
   process = extractBright(process);
 
   // Gets largest blob in thresholded image
@@ -333,6 +334,7 @@ function stopCamera() {
   document.getElementById("canvasOutput").getContext("2d").clearRect(0, 0, width, height);
   document.getElementById("processOutput").getContext("2d").clearRect(0, 0, width, height);
   document.getElementById("characterOutput").getContext("2d").clearRect(0, 0, width, height);
+  document.getElementById("cameraOutput").getContext("2d").clearRect(0, 0, width, height);
   video.pause();
   video.srcObject=null;
   stream.getVideoTracks()[0].stop();
