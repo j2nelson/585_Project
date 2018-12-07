@@ -223,14 +223,14 @@ function getAccelBetweenPoints(prev, curr, prevTick) {
 function detectSwipe(curr, prev, prevSpeed, prevTick) {
   let speed = getSpeedBetweenPoints(prev, curr, prevTick);
   let accel = getAccelBetweenPoints(prevSpeed * 100, speed * 100, prevTick);
-  if(Math.abs(accel) >= 0.8 && !end_swipe && !init_swipe) {
+  if(Math.abs(accel) >= 1 && !end_swipe && !init_swipe) {
     mode = 0;
     init_swipe = true;
-  } else if (Math.abs(accel) < 0.8 && init_swipe && !end_swipe) {
+  } else if (Math.abs(accel) < 1 && init_swipe && !end_swipe) {
     mode = 0;
     init_swipe = false;
     end_swipe = true;
-    setTimeout( () => { end_swipe = false; mode = 1; }, 800);
+    setTimeout( () => { end_swipe = false; mode = 1; }, 500);
     saveCanvas(canvas);
     clearCanvas(canvas);
   }
