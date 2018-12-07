@@ -6,13 +6,13 @@
 
 #IncludeRegexTransform: 
 
-/Users/ellenlowing/Desktop/CS585/project/local/1/main.cpp
+/Users/ellenlowing/Desktop/CS585/project/local/app/main.cpp
 opencv2/core/core.hpp
-/Users/ellenlowing/Desktop/CS585/project/local/1/opencv2/core/core.hpp
+/Users/ellenlowing/Desktop/CS585/project/local/app/opencv2/core/core.hpp
 opencv2/highgui/highgui.hpp
-/Users/ellenlowing/Desktop/CS585/project/local/1/opencv2/highgui/highgui.hpp
+/Users/ellenlowing/Desktop/CS585/project/local/app/opencv2/highgui/highgui.hpp
 opencv2/imgproc/imgproc.hpp
-/Users/ellenlowing/Desktop/CS585/project/local/1/opencv2/imgproc/imgproc.hpp
+/Users/ellenlowing/Desktop/CS585/project/local/app/opencv2/imgproc/imgproc.hpp
 iostream
 -
 cmath

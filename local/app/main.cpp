@@ -100,16 +100,24 @@ void connectTheDots(Mat& canvas, Point& dot, Point& prev) {
     @param canvas Input image to clear
 */
 void saveCanvas(Mat& canvas) {
+  // filename based on hour, minute, second
   time_t rawtime;
   struct tm * timeinfo;
   char filename_buf [7];
-
   time (&rawtime);
   timeinfo = localtime (&rawtime);
-
   strftime (filename_buf,7,"%H%M%S",timeinfo);
   string filename = filename_buf;
-  imwrite("output/" + filename + ".jpg", canvas);
+
+  // crop out character only
+  Moments m = moments(canvas, true);
+  Point centroid = Point(m.m10/m.m00, m.m01/m.m00);
+  float ratio = m.m00 / (w * h);
+  int width = ((h * ratio * 64) > h) ? h : h * ratio * 64;
+  Rect rect(centroid.x - width/2, centroid.y - width/2, width, width);
+  rectangle(canvas, rect, Scalar(255, 255, 255), 3, 8, 0);
+  Mat crop = canvas(rect);
+  imwrite("output/" + filename + ".jpg", crop);
 }
 
 /**
@@ -118,7 +126,17 @@ void saveCanvas(Mat& canvas) {
     @param canvas Input image to clear
 */
 void clearCanvas(Mat& canvas) {
-  canvas = Mat::zeros(canvas.size(), CV_8UC3);
+  canvas = Mat::zeros(canvas.size(), CV_8UC1);
+}
+
+/**
+    Gets distance between two points
+
+    @param a First point
+    @param b Second point
+*/
+int getDistanceBetweenPoints(Point a, Point b) {
+  return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
 }
 
 int main(int, char**)
@@ -132,7 +150,7 @@ int main(int, char**)
     resize(frame, frame, Size(640, 360), 0, 0, INTER_CUBIC);
     w = frame.cols;
     h = frame.rows;
-    Mat canvas = Mat::zeros(frame.size(), CV_8UC3);
+    Mat canvas = Mat::zeros(frame.size(), CV_8UC1);
     Point prevCentroid;
     bool init = false;
 
@@ -146,19 +164,23 @@ int main(int, char**)
         extractBright(gray, thresh);
         // imshow("threshold", thresh);
 
-
         // Get largest blob in thresholded image
         Mat blob = Mat::zeros(frame.size(), CV_8UC1);
         getLargestBlob(thresh, blob);
-        imshow("largest blob", blob);
-
+        // imshow("largest blob", blob);
 
         // Get center of blob, flip it in y-axis, and draw on output
         Point centroid;
         getCentroidofBlob(blob, centroid);
-        if(init && prevCentroid.x > 0 && prevCentroid.y > 0 && centroid.x > 0 && centroid.y > 0) connectTheDots(canvas, centroid, prevCentroid);
+        if(init && getDistanceBetweenPoints(prevCentroid, centroid) < 100 && prevCentroid.x > 0 && prevCentroid.y > 0 && centroid.x > 0 && centroid.y > 0) connectTheDots(canvas, centroid, prevCentroid);
         prevCentroid = centroid;
-        imshow("output", canvas);
+        // imshow("output", canvas);
+
+        // Combine windows for graphical output
+        Mat output(360, 640*2, CV_8UC1);
+        blob.copyTo(output(Rect(0, 0, 640, 360)));
+        canvas.copyTo(output(Rect(640, 0, 640, 360)));
+        imshow("output", output);
 
         if(!init) init = true;
         int c = waitKey(5);
