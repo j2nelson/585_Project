@@ -128,38 +128,68 @@ def train_neural_network():
             if i % 10 == 0:
                 print("Loss: ", loss_val)
     
-    # run the network 100 time with random inputs to determine an accuracy percentage
+    # run the network with test inputs to determine an accuracy percentage
     num_right = 0
+
+    # kernel for image morphology
+    kernel = np.ones((9,9),np.uint8)
+
+    # the folder that the test data is in
+    test_image_dir = join(ROOT_PATH, "test_data")
+
+    test_labels = []
+    test_images = []
+
+    # make a list of all the file names
+    file_names = [join(test_image_dir, f)
+                  for f in sorted(listdir(test_image_dir))
+                      if isfile(join(test_image_dir, f))
+                          and f.endswith(".jpg")]
     
-    # Pick 100 random images
-    sample_indexes = random.sample(range(len(images_norm)), 100)
-    sample_images = [images_norm[i] for i in sample_indexes]
-    sample_labels = [labels[i] for i in sample_indexes]
+    # for each file save the image
+    for f in file_names:
+        img = cv2.imread(f, 0)
+
+        # expand the lines of the letter in the image
+        dilation = cv2.dilate(img,kernel,iterations = 1)
+        
+        # Rescale the image to 28 by 28
+        img28 = cv2.resize(dilation, (28, 28))
+        
+        test_images.append(img28.copy())
+
+        # determine the letter classification by the file name
+        l = f.replace("/Users/jamienelson/Documents/CS 585/test_data/", "")
+        letter = l.replace(".jpg", "")
+        test_labels.append(letter)
+
+    test_images = np.array(test_images)
+    test_labels = np.array(test_labels)
 
     # Run the "correct_pred" operation
-    predicted = sess.run([correct_pred], feed_dict={x: sample_images})[0]
+    predicted = sess.run([correct_pred], feed_dict={x: test_images})[0]
                                 
     # Print the real and predicted labels
-    print(sample_labels)
-    print(predicted)
+    print(test_labels)
+    print([letter_lookup[predicted[i]] for i in range(len(test_images))])
 
     # Display the predictions and the ground truth visually.
-    for i in range(len(sample_images)):
-        truth = sample_labels[i]
-        prediction = predicted[i]
-        plt.subplot(20, 5,1+i)
+    for i in range(len(test_images)):
+        truth = test_labels[i]
+        prediction = letter_lookup[predicted[i]]
+        plt.subplot(3, 2,1+i)
         plt.axis('off')
         color='green' if truth == prediction else 'red'
         if truth == prediction:
             num_right += 1
-        plt.text(40, 35, "Truth:        {0}\nPrediction: {1}".format(letter_lookup[truth], letter_lookup[prediction]), 
-                    fontsize=8, color=color)
-        plt.imshow(sample_images[i],  cmap="gray")
+        plt.text(30, 15, "Truth:        {0}\nPrediction: {1}".format(truth, prediction), 
+                    fontsize=10, color=color)
+        plt.imshow(test_images[i],  cmap="gray")
 
     plt.show()
  
     # this is the accuracy 
-    print(num_right/100)
+    print(num_right/6)
     
     sess.close()
 
