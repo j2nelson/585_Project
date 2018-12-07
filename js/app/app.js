@@ -40,6 +40,11 @@ let dstC3 = null;
 let dstC4 = null;
 let canvas = null;
 let prevCentroid = null;
+let prevSpeed = null;
+let prevTick = null;
+let mode = null;
+let init_swipe = null;
+let end_swipe = null;
 
 function startVideoProcessing() {
   if (!streaming) { console.warn("Please startup your webcam"); return; }
@@ -50,6 +55,9 @@ function startVideoProcessing() {
   dstC4 = new cv.Mat(height, width, cv.CV_8UC4);
   canvas = new cv.Mat(height, width, cv.CV_8UC1);
   prevCentroid = {x:-1, y:-1};
+  mode = 1;
+  init_swipe = false;
+  end_swipe = false;
   requestAnimationFrame(processVideo);
 }
 
@@ -175,6 +183,60 @@ function getCentroidofBlob(src) {
   return centroid;
 }
 
+
+/**
+    Gets velocity with two points
+
+    @param prev Previous tracked point
+    @param curr Current tracked point
+    @param prevTick Previous timestamp
+*/
+function getSpeedBetweenPoints(prev, curr, prevTick) {
+  let tick = new Date();
+  let delta = tick - prevTick;
+  let vx = (curr.x - prev.x) / delta;
+  let vy = (curr.y - prev.y) / delta;
+  let v = Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2));
+  return v;
+}
+
+/**
+    Gets acceleration with two velocity
+
+    @param prev Previous tracked point
+    @param curr Current tracked point
+    @param prevTick Previous timestamp
+*/
+function getAccelBetweenPoints(prev, curr, prevTick) {
+  let tick = new Date();
+  let delta = tick - prevTick;
+  let accel = (curr - prev) / delta;
+  return accel;
+}
+
+/**
+    Detect swipe gesture to the right by tracking velocity
+
+    @param prev Previous tracked point
+    @param curr Current tracked point
+*/
+function detectSwipe(curr, prev, prevSpeed, prevTick) {
+  let speed = getSpeedBetweenPoints(prev, curr, prevTick);
+  let accel = getAccelBetweenPoints(prevSpeed * 100, speed * 100, prevTick);
+  if(Math.abs(accel) >= 0.8 && !end_swipe && !init_swipe) {
+    mode = 0;
+    init_swipe = true;
+  } else if (Math.abs(accel) < 0.8 && init_swipe && !end_swipe) {
+    mode = 0;
+    init_swipe = false;
+    end_swipe = true;
+    setTimeout( () => { end_swipe = false; mode = 1; }, 800);
+    saveCanvas(canvas);
+    clearCanvas(canvas);
+  }
+  return speed;
+}
+
 /**
     Draws line between previous and current tracked point.
 
@@ -192,7 +254,7 @@ function clearCanvas() {
 
 function saveCanvas() {
   let centroid = getCentroidofBlob(canvas);
-  cv.circle(canvas, centroid, 10, [255, 0, 0, 255], 1, 8, 0);
+  // cv.circle(canvas, centroid, 10, [255, 0, 0, 255], 1, 8, 0);
   let minX = width;
   let maxX = 0;
   let minY = height;
@@ -241,13 +303,19 @@ function processVideo() {
 
   // Gets center of blob, flip point in y-axis, and draw on canvas
   let centroid = getMirroredCentroidofBlob(process);
-  if(getDistanceBetweenPoints(prevCentroid, centroid) < 100 && prevCentroid.x > 0 && prevCentroid.y > 0 && centroid.x > 0 && centroid.y > 0)
-    connectDots(centroid, prevCentroid);
+  let speed, accel;
+  if(getDistanceBetweenPoints(prevCentroid, centroid) < 100 && prevCentroid.x > 0 && prevCentroid.y > 0 && centroid.x > 0 && centroid.y > 0) {
+    speed = detectSwipe(prevCentroid, centroid, prevSpeed, prevTick);
+    if(mode == 1) connectDots(centroid, prevCentroid);
+  }
 
   cv.imshow("processOutput", process);
   cv.imshow("canvasOutput", canvas);
   stats.end();
   prevCentroid = centroid;
+  prevSpeed = speed;
+  prevTick = new Date();
+
 
   requestAnimationFrame(processVideo);
 }
