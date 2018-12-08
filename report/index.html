@@ -1,0 +1,112 @@
+
+<html>
+<head>
+<meta charset="UTF-8">
+<title> CS585 Final project  </title>
+<style>
+<!--
+body{
+font-family: 'Trebuchet MS', Verdana;
+}
+p{
+font-family: 'Trebuchet MS', Times;
+margin: 10px 10px 15px 20px;
+}
+h3{
+margin: 5px;
+}
+h2{
+margin: 10px;
+}
+h1{
+margin: 10px 0px 0px 20px;
+}
+div.main-body{
+align:center;
+margin: 30px;
+}
+hr{
+margin:20px 0px 20px 0px;
+}
+-->
+</style>
+</head>
+
+<body>
+<center>
+<a href="#"><img border="0" src="http://www.cs.bu.edu/fac/betke/images/bu-logo.gif"
+width="119" height="120"></a>
+</center>
+
+<h1>CS585 Final project </h1>
+<p>
+ Gesture-based Text Entry Interface <br>
+ Ellen Lo <br>
+ Jamie Nelson <br>
+ December 8th, 2018
+</p>
+
+<div class="main-body">
+<hr>
+<h2> Motivation </h2>
+<p>
+  Inspired by Google Creative Lab's projects such as <a href="https://experiments.withgoogle.com/teachable-machine">Teachable Machine</a> and <a href="https://experiments.withgoogle.com/move-mirror">Move Mirror</a>, I wanted to make computer vision technology accessible by making it live in the browser.
+  In this project, we decided to create a text entry interface by tracking hand movements and gesture recognition. As the capabilities of voice assistants expands rapidly, repeated voice commands can be exhausting and frustrating for users. Hence, it is worth the effort to explore alternative ways to make commands through gestures.
+  Also, typing is typically recognized as a boring task. By introducing physical movements as alternative medium for text entry, the task is turned into a physical activity and can be a good workout for many who are occupied with work and do not have time to go to the gym.
+</p>
+
+<hr>
+<h2> Problem Definition </h2>
+<p>
+  Our goal is to detect and track light in live video, trace its movements as character paths, and eventually predict character with neural network. We chose to explore Hiragana, the foundation of Japanese language, for character prediction task because most characters are segmented and hence more challenging to track when writing in air. <br>
+</p>
+
+<hr>
+<h2> Method and Implementation </h2>
+<p>
+  The setup of experiment consists of a camera looking at a scene with the user holding her phone (with torch/flashlight control). Character paths are traced only when flashlight is on. The user will perform a quick swipe gesture to left/right to represent completion of character. Upon detection of swipe gesture, image of traced character path will be fed into the neural network for classification. <br>
+  The system consists of two components: tracking bright spot and segmentation with computer vision as well as character prediction with machine learning. The workflow of the computer vision component can be described in the following image: <br>
+  <img src="../img/workflow.png" alt="Workflow of computer vision system" style="width: 70vw; display:block; margin-left:auto; margin-right:auto;"> <br>
+  The computer vision system takes in camera input and converts it to grayscale image. The grayscale image is then thresholded to create a binary image where all pixels with brightness of values below 254 are 0 and the rest if 1. The largest blob in binary image is detected, and the blob's centroid is tracked to draw on canvas. To detect swipe gesture, the system also keeps track of the position of blob in previous frame in order to get velocity and acceleration of the bright spot in scene. Upon detection of a swipe gesture, the canvas is saved, displayed on webpage and cleared for the next character paths. Below is a visualization of the thresholding and blob detecting as well as swipe detecting results: <br><br>
+  <table>
+    <tr>
+      <td><img src="../img/raw.gif" alt="Grayscale camera input" style="width:30vw;"></td>
+      <td><img src="../img/threshold.gif" alt="Thresholded binary image" style="width:30vw;"></td>
+      <td><img src="../img/canvas.gif" alt="Canvas" style="width:30vw;"></td>
+    </tr>
+    <tr>
+      <td style="text-align: center;">Grayscale camera input</td>
+      <td style="text-align: center;">Thresholded binary image</td>
+      <td style="text-align: center;">Canvas</td>
+    </tr>
+  </table>
+  <br>
+</p>
+
+<hr>
+<h2> Experiments </h2>
+<p>
+  Although the experience is decided to live within the browser, we tested it with native OpenCV implementation with C++ in order to make sure our algorithm works. <br>
+  The porting of OpenCV C++ code to OpenCV.js was less challenging than expected. Despite the lack of maintenance of the library, I came across an OpenCV.js implementation on <a href="https://codepen.io/huningxin/pen/NvjdeN">CodePen</a> and learnt how to use WebAssmebly to get webcam input within browser.
+</p>
+
+<hr>
+<h2> Results </h2>
+<p>
+</p>
+
+<hr>
+<h2> Discussion </h2>
+<p>
+</p>
+
+<hr>
+<h2> Conclusion </h2>
+<p>
+</p>
+
+</body>
+
+
+
+</html>
