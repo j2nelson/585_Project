@@ -98,14 +98,14 @@ def train_neural_network():
         # Fully connected layer using the RELU activation function with 50 possible classifications
         logits = tf.contrib.layers.fully_connected(images_flat, 50, tf.nn.relu)
 
-        # Convert logits to label indexes
-        correct_pred = tf.argmax(logits, 1)
-
         # Define a loss function using the softmax cross entropy 
         loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels = y, 
                                                                             logits = logits))
         # Define an optimizer 
         train_op = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
+
+        # Convert logits to label indexes
+        correct_pred = tf.argmax(logits, 1)
 
         # Define an accuracy metric
         accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
@@ -190,6 +190,12 @@ def train_neural_network():
  
     # this is the accuracy 
     print(num_right/6)
+
+    labels_test = [0, 4, 10, 26, 43, 44]
+
+    testing = sess.run(accuracy, feed_dict={x:test_images, y:labels_test})
+    
+    print('Accuracy: {:.4}%'.format(testing*100))
     
     sess.close()
 
