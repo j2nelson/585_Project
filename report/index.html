@@ -106,11 +106,15 @@
       <h3> Machine Learning </h3>
         <p>
           For the machine learning task, first we looked for datasets of Hiragana characters with labels
-          to train a neural network. We found this dataset
+          to train a neural network with. We found this dataset
           <a href="https://github.com/inoueMashuu/hiragana-dataset">Hiragana data</a> which has a total 1,000 images,
-          50 Hiragana characters with 20 samples each. Similar to the segmentation methods, we first created
+          50 Hiragana characters with 20 samples each. Similar to the segmentation method, we first created
           a local python verison of a neural network with TensorFlow. Working with TensorFlow was a learning
           curve, so the first version of the network we implemented was a simple Feed Forward Neural Network.
+          We preprocessed the images by rescaling them to be 28 by 28. In the second verison of the neural
+          network, we imporved the preprocessing by normalizing the images from grayscale values of 0 to 255 to
+          values between 0 and 1. The accuracy of the first verison was 50% and the normalization gave an
+          improved accuracy of 98%.
         </p>
 
       <hr>
@@ -133,6 +137,7 @@
         </p>
       <h3> Machine Learning </h3>
         <p>
+          Below is the results of the first and second version of the Feed Forward Neural Network:
         </p>
         <center>
           <table>
@@ -146,6 +151,12 @@
             </tr>
           </table>
         </center>
+        <p>
+          Next, we used images that were outputed from the segmentation algorithm. The first image we used, seen on the left,
+          was feed into the preprocessing before the neural network and resulted in the image in the middle. This gave poor
+          results because the line segmentations are difficult to even see. So, we added one more preprocessing step of dialtaion
+          using a 9 by 9 kernal of 1s. The result of this is seen in the figure on the right:
+        </p>
         <center>
         <table>
           <tr>
@@ -160,6 +171,10 @@
           </tr>
         </table>
         </center>
+        <p>
+          Finally, we tested our programming by first gesturing six characters in the live web video which were passed to the
+          trained neural network and gave the following output: 
+        </p>
         <center>
           <table>
           <tr>
