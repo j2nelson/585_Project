@@ -87,7 +87,7 @@
       <h3> Segmentation </h3>
         <p>
           The workflow of the computer vision component can be described in the following image: <br>
-          <img src="../img/workflow.png" alt="Workflow of computer vision system" style="width: 70vw; display:block; margin-left:auto; margin-right:auto;"> <br>
+          <img src="./img/workflow.png" alt="Workflow of computer vision system" style="width: 70vw; display:block; margin-left:auto; margin-right:auto;"> <br>
           The computer vision system takes in the camera input and converts it to a grayscale image. The grayscale image is then thresholded
           to create a binary image. All the pixels with a brightness value below 254 are set to 0 and the rest are 1. The largest blob in
           binary image is detected, and the blob's centroid is tracked to draw the character path on the canvas. To detect swipe gesture,
@@ -111,10 +111,21 @@
           50 Hiragana characters with 20 samples each. Similar to the segmentation method, we first created
           a local python verison of a neural network with TensorFlow. Working with TensorFlow was a learning
           curve, so the first version of the network we implemented was a simple Feed Forward Neural Network.
+          We used a fully connected layer with the relu activation function. We used the softmax cross entropy
+          as the loss function and the ADAM optimizer with a learning rate of 0.001 to predict the results. This
+          training consisted of 201 EPOCHs for best results.
           We preprocessed the images by rescaling them to be 28 by 28. In the second verison of the neural
           network, we imporved the preprocessing by normalizing the images from grayscale values of 0 to 255 to
           values between 0 and 1. The accuracy of the first verison was 50% and the normalization gave an
           improved accuracy of 98%.
+          When we added the segmented images from the web camera, the results were only 50% accurate. We
+          hypoysized that this was due to overfitting since we did not have a validation dataset. We only had a
+          limited amount of training data so we did not split up the data into different sets.
+          Next, we created a Convolutional Neural Network. We used two convenluational layers with 5 by 5 filters, two
+          max pooling layers, and a dropout probability of 0.5. We also increased the image size to 32 by 32 to see if
+          that enhanced the accuracy. The network was very slow so we only ran it on 20 EPOCHs. The results were a 50% accuracy.
+          Therefore, the original network was better for testing with our segementation images. 
+
         </p>
 
       <hr>
@@ -124,9 +135,9 @@
           Below is a visualization of the thresholding and blob detecting as well as swipe detecting results: <br><br>
           <table>
             <tr>
-              <td><img src="../img/raw.gif" alt="Grayscale camera input" style="width:30vw;"></td>
-              <td><img src="../img/threshold.gif" alt="Thresholded binary image" style="width:30vw;"></td>
-              <td><img src="../img/canvas.gif" alt="Canvas" style="width:30vw;"></td>
+              <td><img src="./img/raw.gif" alt="Grayscale camera input" style="width:30vw;"></td>
+              <td><img src="./img/threshold.gif" alt="Thresholded binary image" style="width:30vw;"></td>
+              <td><img src="./img/canvas.gif" alt="Canvas" style="width:30vw;"></td>
             </tr>
             <tr>
               <td style="text-align: center;">Grayscale camera input</td>
@@ -173,7 +184,7 @@
         </center>
         <p>
           Finally, we tested our programming by first gesturing six characters in the live web video which were passed to the
-          trained neural network and gave the following output: 
+          trained neural network and gave the following output:
         </p>
         <center>
           <table>
