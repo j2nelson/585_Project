@@ -105,26 +105,26 @@
         </p>
       <h3> Machine Learning </h3>
         <p>
-          For the machine learning task, first we looked for datasets of Hiragana characters with labels
-          to train a neural network with. We found this dataset
+          For the machine learning task, first we looked for datasets of Hiragana characters with labels to train
+          a neural network with. We found this dataset
           <a href="https://github.com/inoueMashuu/hiragana-dataset">Hiragana data</a> which has a total 1,000 images,
-          50 Hiragana characters with 20 samples each. Similar to the segmentation method, we first created
-          a local python verison of a neural network with TensorFlow. Working with TensorFlow was a learning
-          curve, so the first version of the network we implemented was a simple Feed Forward Neural Network.
-          We used a fully connected layer with the relu activation function. We used the softmax cross entropy
-          as the loss function and the ADAM optimizer with a learning rate of 0.001 to predict the results. This
-          training consisted of 201 EPOCHs for best results.
-          We preprocessed the images by rescaling them to be 28 by 28. In the second verison of the neural
-          network, we imporved the preprocessing by normalizing the images from grayscale values of 0 to 255 to
-          values between 0 and 1. The accuracy of the first verison was 50% and the normalization gave an
-          improved accuracy of 98%.
-          When we added the segmented images from the web camera, the results were only 50% accurate. We
-          hypoysized that this was due to overfitting since we did not have a validation dataset. We only had a
-          limited amount of training data so we did not split up the data into different sets.
-          Next, we created a Convolutional Neural Network. We used two convenluational layers with 5 by 5 filters, two
-          max pooling layers, and a dropout probability of 0.5. We also increased the image size to 32 by 32 to see if
-          that enhanced the accuracy. The network was very slow so we only ran it on 20 EPOCHs. The results were a 50% accuracy.
-          Therefore, the original network was better for testing with our segementation images. 
+          50 Hiragana characters with 20 samples each. Similar to the segmentation method, we first created a local
+          python version of a neural network with TensorFlow. Working with TensorFlow was a learning curve, so the first
+          version of the network we implemented was a simple Feed Forward Neural Network. We used a fully connected layer
+          with the relu activation function. We used the softmax cross entropy as the loss function and the ADAM optimizer
+          with a learning rate of 0.001 to predict the results. This training consisted of 201 EPOCHs for best accuracy.
+          <br> <br>
+          We preprocessed the images by rescaling them to be 28 by 28. In the second version of the neural network, we
+          improved the preprocessing by normalizing the images from grayscale values of 0 to 255 to values between 0 and 1.
+          The accuracy of the first version was 50% and the normalization gave an improved accuracy of 98%. When we added the
+          segmented images from the web camera, the results were only 50% accurate. We hypothesized that this was due to
+          overfitting since we did not have a validation dataset. We only had a limited amount of training data so we did
+          not split up the data into different sets.
+          <br> <br>
+          Next, we created a Convolutional Neural Network. We used two convolutional
+          layers with 5 by 5 filters, two max pooling layers, and a dropout probability of 0.5. We also increased the image
+          size to 32 by 32 to see if that enhanced the accuracy. The network was very slow so we only ran it on 20 EPOCHs.
+          The results were a 50% accuracy. Therefore, the original network was better for testing with our segmented images.
 
         </p>
 
@@ -148,7 +148,7 @@
         </p>
       <h3> Machine Learning </h3>
         <p>
-          Below is the results of the first and second version of the Feed Forward Neural Network:
+          Below are the results of the first and second version of the Feed Forward Neural Network:
         </p>
         <center>
           <table>
@@ -163,10 +163,10 @@
           </table>
         </center>
         <p>
-          Next, we used images that were outputed from the segmentation algorithm. The first image we used, seen on the left,
-          was feed into the preprocessing before the neural network and resulted in the image in the middle. This gave poor
-          results because the line segmentations are difficult to even see. So, we added one more preprocessing step of dialtaion
-          using a 9 by 9 kernal of 1s. The result of this is seen in the figure on the right:
+          Next, we used images that were outputted from the segmentation algorithm. The first image we used, seen
+          on the left, was feed into the preprocessing before the neural network and resulted in the image in the middle.
+          This gave poor results because the line segmentations are difficult to even see. So, we added one more
+          preprocessing step of dilation using a 9 by 9 kernel of 1s. The result of this is seen in the figure on the right:
         </p>
         <center>
         <table>
@@ -183,8 +183,8 @@
         </table>
         </center>
         <p>
-          Finally, we tested our programming by first gesturing six characters in the live web video which were passed to the
-          trained neural network and gave the following output:
+          Finally, we tested our program by first gesturing six characters in the
+          live web video which were passed to the trained neural network and gave the following output:
         </p>
         <center>
           <table>
@@ -223,9 +223,9 @@
       <h2> Conclusion </h2>
       <p>
         This was a difficult task for us to undertake but it was is very fun as well. The future of machine learning,
-        with the introduction of TensorFlow.js this year and with OpenCV.js, is expanding. There are
-        many oportunities for web based computer vision tasks like this one. It is great to be a part of this change
-        and hopefully we can obtain even better results in the future.
+        with the introduction of TensorFlow.js this year and with OpenCV.js, is expanding. There are many opportunities
+        for web based computer vision tasks like this one. It is great to be a part of this change and hopefully we can
+        obtain even better results in the future.
       </p>
 
     </div>
