@@ -1,112 +1,162 @@
 
+<!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8">
-<title> CS585 Final project  </title>
-<style>
-<!--
-body{
-font-family: 'Trebuchet MS', Verdana;
-}
-p{
-font-family: 'Trebuchet MS', Times;
-margin: 10px 10px 15px 20px;
-}
-h3{
-margin: 5px;
-}
-h2{
-margin: 10px;
-}
-h1{
-margin: 10px 0px 0px 20px;
-}
-div.main-body{
-align:center;
-margin: 30px;
-}
-hr{
-margin:20px 0px 20px 0px;
-}
--->
-</style>
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <title> CS585 Final project  </title>
+    <style>
+      <!--
+      body{
+        font-family: 'Trebuchet MS', Verdana;
+      }
+      p{
+        font-family: 'Trebuchet MS', Times;
+        margin: 10px 10px 15px 20px;
+      }
+      h3{
+        margin: 5px;
+      }
+      h2{
+        margin: 10px;
+      }
+      h1{
+        margin: 10px 0px 0px 20px;
+      }
+      div.main-body{
+        align:center;
+        margin: 30px;
+      }
+      hr{
+        margin:20px 0px 20px 0px;
+      }
+      -->
+    </style>
+  </head>
 
-<body>
-<center>
-<a href="#"><img border="0" src="http://www.cs.bu.edu/fac/betke/images/bu-logo.gif"
-width="119" height="120"></a>
-</center>
+  <body>
+    <center>
+      <a href="http://www.cs.bu.edu/fac/betke/images/bu-logo.gif">
+        <img border="0" src="http://www.cs.bu.edu/fac/betke/images/bu-logo.gif" width="119" height="120">
+      </a>
+    </center>
 
-<h1>CS585 Final project </h1>
-<p>
- Gesture-based Text Entry Interface <br>
- Ellen Lo <br>
- Jamie Nelson <br>
- December 8th, 2018
-</p>
+    <h1>CS585 Final project </h1>
+    <p>
+      Gesture-based Text Entry Interface <br>
+      Ellen Lo <br>
+      Jamie Nelson <br>
+      December 8th, 2018
+    </p>
 
-<div class="main-body">
-<hr>
-<h2> Motivation </h2>
-<p>
-  Inspired by Google Creative Lab's projects such as <a href="https://experiments.withgoogle.com/teachable-machine">Teachable Machine</a> and <a href="https://experiments.withgoogle.com/move-mirror">Move Mirror</a>, I wanted to make computer vision technology accessible by making it live in the browser.
-  In this project, we decided to create a text entry interface by tracking hand movements and gesture recognition. As the capabilities of voice assistants expands rapidly, repeated voice commands can be exhausting and frustrating for users. Hence, it is worth the effort to explore alternative ways to make commands through gestures.
-  Also, typing is typically recognized as a boring task. By introducing physical movements as alternative medium for text entry, the task is turned into a physical activity and can be a good workout for many who are occupied with work and do not have time to go to the gym.
-</p>
+    <div class="main-body">
+      <hr>
+      <h2> Motivation </h2>
+      <p>
+        Inspired by Google Creative Lab's projects such as <a href="https://experiments.withgoogle.com/teachable-machine">Teachable Machine</a>
+        and <a href="https://experiments.withgoogle.com/move-mirror">Move Mirror</a>, we hoped to make computer vision technology accessible by
+        making it live in the browser.
+        In this project, we decided to create a text entry interface by tracking hand movements and gesture recognition.
+        As the capabilities of voice assistants expands rapidly, repeated voice commands can be exhausting and frustrating for users.
+        Hence, it is worth the effort to explore alternative ways to make commands through gestures.
+        Also, typing is typically recognized as a boring task. By introducing physical movements as alternative medium for text entry,
+        the task is turned into a physical activity and can be a good workout for many who are occupied with work and do not have time
+        to go to the gym.
+      </p>
 
-<hr>
-<h2> Problem Definition </h2>
-<p>
-  Our goal is to detect and track light in live video, trace its movements as character paths, and eventually predict character with neural network. We chose to explore Hiragana, the foundation of Japanese language, for character prediction task because most characters are segmented and hence more challenging to track when writing in air. <br>
-</p>
+      <hr>
+      <h2> Problem Definition </h2>
+      <p>
+        Our goal is to detect and track a light source/point in live video, trace its movement as character segments, and eventually
+        predict the character with a neural network. We chose to explore Hiragana, the foundation of Japanese language, for the
+        character prediction task. Most characters are highly segmented and therefore tracking the light through the air is a more
+        challenging task.
+      </p>
 
-<hr>
-<h2> Method and Implementation </h2>
-<p>
-  The setup of experiment consists of a camera looking at a scene with the user holding her phone (with torch/flashlight control). Character paths are traced only when flashlight is on. The user will perform a quick swipe gesture to left/right to represent completion of character. Upon detection of swipe gesture, image of traced character path will be fed into the neural network for classification. <br>
-  The system consists of two components: tracking bright spot and segmentation with computer vision as well as character prediction with machine learning. The workflow of the computer vision component can be described in the following image: <br>
-  <img src="../img/workflow.png" alt="Workflow of computer vision system" style="width: 70vw; display:block; margin-left:auto; margin-right:auto;"> <br>
-  The computer vision system takes in camera input and converts it to grayscale image. The grayscale image is then thresholded to create a binary image where all pixels with brightness of values below 254 are 0 and the rest if 1. The largest blob in binary image is detected, and the blob's centroid is tracked to draw on canvas. To detect swipe gesture, the system also keeps track of the position of blob in previous frame in order to get velocity and acceleration of the bright spot in scene. Upon detection of a swipe gesture, the canvas is saved, displayed on webpage and cleared for the next character paths. Below is a visualization of the thresholding and blob detecting as well as swipe detecting results: <br><br>
-  <table>
-    <tr>
-      <td><img src="../img/raw.gif" alt="Grayscale camera input" style="width:30vw;"></td>
-      <td><img src="../img/threshold.gif" alt="Thresholded binary image" style="width:30vw;"></td>
-      <td><img src="../img/canvas.gif" alt="Canvas" style="width:30vw;"></td>
-    </tr>
-    <tr>
-      <td style="text-align: center;">Grayscale camera input</td>
-      <td style="text-align: center;">Thresholded binary image</td>
-      <td style="text-align: center;">Canvas</td>
-    </tr>
-  </table>
-  <br>
-</p>
+      <hr>
+      <h2> Method and Implementation </h2>
+      <h3> Segmentation </h3>
+        <p>
+          The setup of experiment consists of a camera looking at a scene with the user holding their phone (with torch/flashlight control).
+          Character paths are traced only when flashlight is on. The user will perform a quick swipe gesture to left/right to represent
+          the completion of a character. Upon detection of swipe gesture, the image of a traced character path will be fed into the neural
+          network for classification. <br>
+          The system consists of two components: tracking bright spot and segmentation with computer vision as well as character prediction
+          with machine learning. The workflow of the computer vision component can be described in the following image: <br>
+          <img src="../img/workflow.png" alt="Workflow of computer vision system" style="width: 70vw; display:block; margin-left:auto; margin-right:auto;"> <br>
+          The computer vision system takes in the camera input and converts it to a grayscale image. The grayscale image is then thresholded
+          to create a binary image. All the pixels with a brightness value below 254 are set to 0 and the rest are 1. The largest blob in
+          binary image is detected, and the blob's centroid is tracked to draw the character path on the canvas. To detect swipe gesture,
+          the system also keeps track of the position of blob in previous frame in order to get velocity and acceleration of the bright spot
+          in scene. Upon detection of a swipe gesture, the canvas is saved, the drawing is cleared for the next character paths, and the
+          saved canvas is displayed on a separate section of the webpage. Below is a visualization of the thresholding and blob detecting as
+          well as swipe detecting results: <br><br>
+          <table>
+            <tr>
+              <td><img src="../img/raw.gif" alt="Grayscale camera input" style="width:30vw;"></td>
+              <td><img src="../img/threshold.gif" alt="Thresholded binary image" style="width:30vw;"></td>
+              <td><img src="../img/canvas.gif" alt="Canvas" style="width:30vw;"></td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">Grayscale camera input</td>
+              <td style="text-align: center;">Thresholded binary image</td>
+              <td style="text-align: center;">Canvas</td>
+            </tr>
+          </table>
+        </p>
+        <p>
+          Although the experience is provided within the browser, we first tested it with a native OpenCV
+          implementation in C++, in order to make sure our algorithm works. <br>
+          The porting of OpenCV C++ code to OpenCV.js was less challenging than expected. Despite the lack
+          of maintenance of the OpenCV.js library, we came across an OpenCV.js implementation on
+          <a href="https://codepen.io/huningxin/pen/NvjdeN">CodePen</a> and learnt how to use WebAssmebly
+          to get webcam input within browser.
+        </p>
+      <h3> Machine Learning </h3>
+        <p>
+          For the machine learning task, first we looked for datasets of Hiragana characters with labels
+          to train a neural network. We found this dataset
+          <a href="https://github.com/inoueMashuu/hiragana-dataset">Hiragana data</a> which has a total 1,000 images,
+          50 Hiragana characters with 20 samples each. Similar to the segmentation methods, we first created
+          a local python verison of a neural network with TensorFlow. Working with TensorFlow was a learning
+          curve, so the first version of the network we implemented was a simple Feed Forward Neural Network.
+        </p>
 
-<hr>
-<h2> Experiments </h2>
-<p>
-  Although the experience is decided to live within the browser, we tested it with native OpenCV implementation with C++ in order to make sure our algorithm works. <br>
-  The porting of OpenCV C++ code to OpenCV.js was less challenging than expected. Despite the lack of maintenance of the library, I came across an OpenCV.js implementation on <a href="https://codepen.io/huningxin/pen/NvjdeN">CodePen</a> and learnt how to use WebAssmebly to get webcam input within browser.
-</p>
+      <hr>
+      <h2> Experiments </h2>
+      <p>
 
-<hr>
-<h2> Results </h2>
-<p>
-</p>
+      </p>
 
-<hr>
-<h2> Discussion </h2>
-<p>
-</p>
+      <hr>
+      <h2> Results </h2>
+      <p>
+        Our live website is available at <a href="https://project-cs585.herokuapp.com">https://project-cs585.herokuapp.com</a>.
+        ADD VIDEO DEMO HERE
+      </p>
 
-<hr>
-<h2> Conclusion </h2>
-<p>
-</p>
+      <hr>
+      <h2> Discussion </h2>
+      <p>
+        <ul>
+          <li> If we had more data of Japanese letters, then the model for classification would possibly improve </li>
+          <li> Also, training the convolutional neural network under better conditions could yield better results </li>
+          <li> Challenging to write more segmented characters in air; compare speed of English and Japanese </li>
+          <li> Difficult to locate discontinuous strokes; mimic transparent glass blackboard by overlaying character
+          path on camera input </li>
+          <li> Auto-removal of ending of character path due to swipe gesture </li>
+          <li> Add gestures for deletion, spacing </li>
+        </ul>
+      </p>
 
-</body>
+      <hr>
+      <h2> Conclusion </h2>
+      <p>
+        This was a difficult task for us to undertake but it was is very fun as well. The future of machine learning,
+        with the introduction of TensorFlow.js this year and with OpenCV.js, is expanding. There are
+        many oportunities for web based computer vision tasks like this one. It is great to be a part of this change
+        and hopefully we can obtain even better results in the future.
+      </p>
 
-
-
+    </div>
+  </body>
 </html>
