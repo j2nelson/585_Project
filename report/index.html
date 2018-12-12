@@ -88,20 +88,7 @@
           binary image is detected, and the blob's centroid is tracked to draw the character path on the canvas. To detect swipe gesture,
           the system also keeps track of the position of blob in previous frame in order to get velocity and acceleration of the bright spot
           in scene. Upon detection of a swipe gesture, the canvas is saved, the drawing is cleared for the next character paths, and the
-          saved canvas is displayed on a separate section of the webpage. Below is a visualization of the thresholding and blob detecting as
-          well as swipe detecting results: <br><br>
-          <table>
-            <tr>
-              <td><img src="../img/raw.gif" alt="Grayscale camera input" style="width:30vw;"></td>
-              <td><img src="../img/threshold.gif" alt="Thresholded binary image" style="width:30vw;"></td>
-              <td><img src="../img/canvas.gif" alt="Canvas" style="width:30vw;"></td>
-            </tr>
-            <tr>
-              <td style="text-align: center;">Grayscale camera input</td>
-              <td style="text-align: center;">Thresholded binary image</td>
-              <td style="text-align: center;">Canvas</td>
-            </tr>
-          </table>
+          saved canvas is displayed on a separate section of the webpage.
         </p>
         <p>
           Although the experience is provided within the browser, we first tested it with a native OpenCV
@@ -123,9 +110,41 @@
 
       <hr>
       <h2> Experiments </h2>
-      <p>
-
-      </p>
+      <h3> Segmentation </h3>
+        <p>
+          Below is a visualization of the thresholding and blob detecting as
+          well as swipe detecting results: <br><br>
+          <table>
+            <tr>
+              <td><img src="../img/raw.gif" alt="Grayscale camera input" style="width:30vw;"></td>
+              <td><img src="../img/threshold.gif" alt="Thresholded binary image" style="width:30vw;"></td>
+              <td><img src="../img/canvas.gif" alt="Canvas" style="width:30vw;"></td>
+            </tr>
+            <tr>
+              <td style="text-align: center;">Grayscale camera input</td>
+              <td style="text-align: center;">Thresholded binary image</td>
+              <td style="text-align: center;">Canvas</td>
+            </tr>
+          </table>
+        </p>
+      <h3> Machine Learning </h3>
+        <p>
+          <img src="./img/version_1.png" alt="First network input" style="width:30vw;">
+          <img src="./img/version_2.png" alt="First network input" style="width:30vw;">
+        </p>
+        <table>
+          <tr>
+            <td><img src="./img/first_input.png" alt="First network input" style="width:30vw;"></td>
+            <td><img src="./img/first_result.png" alt="First resulting image after normalization" style="width:30vw;"></td>
+            <td><img src="./img/fixed_input.png" alt="Fixed input" style="width:30vw;"></td>
+          </tr>
+          <tr>
+            <td style="text-align: center;">First network input</td>
+            <td style="text-align: center;">First resulting image after normalization</td>
+            <td style="text-align: center;">Fixed input</td>
+          </tr>
+        </table>
+        <img src="./img/results_of_first_six.png" alt="First network input" style="width:30vw;">
 
       <hr>
       <h2> Results </h2>
